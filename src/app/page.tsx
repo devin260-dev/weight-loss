@@ -19,11 +19,19 @@ import LevelProgress from '@/components/LevelProgress';
 import WeightChart from '@/components/WeightChart';
 import OnboardingForm from '@/components/OnboardingForm';
 import LevelUpModal from '@/components/LevelUpModal';
+import MuteToggle from '@/components/MuteToggle';
+import { useBackgroundMusic } from '@/lib/useBackgroundMusic';
 
 export default function Home() {
   const { userData, setUserData } = useUserData();
   const [isClient, setIsClient] = useState(false);
   const [devMode, setDevMode] = useState(false);
+
+  // Background music - plays level-specific music that loops
+  const { isMuted, toggleMute, play: playMusic } = useBackgroundMusic({
+    level: userData?.currentLevel || 1,
+    enabled: isClient && !!userData?.onboardingComplete,
+  });
 
   useEffect(() => {
     // This is a standard pattern for client-side mounting detection
@@ -196,7 +204,12 @@ export default function Home() {
   const existingDates = userData.entries.map((e: WeightEntry) => e.date);
 
   return (
-    <div className="min-h-screen p-4">
+    <div className="min-h-screen p-4" onClick={playMusic}>
+      {/* Mute Toggle Button */}
+      {isClient && userData?.onboardingComplete && (
+        <MuteToggle isMuted={isMuted} onToggle={toggleMute} />
+      )}
+
       {/* Header */}
       <header className="text-center py-2 mb-4">
         <h1 className="text-xl text-[var(--primary)] mb-1">

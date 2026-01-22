@@ -230,10 +230,16 @@ export default function Home() {
           )}
         </div>
       ) : (
-        <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 2fr' }}>
-          {/* Left Column (1/3) - Avatar */}
-          <div className="flex flex-col items-center">
-            <Avatar level={userData.currentLevel} size="lg" animated />
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {/* Left Column - Avatar (full width on mobile, 1/3 on desktop) */}
+          <div className="flex flex-col items-center lg:col-span-1">
+            {/* Show medium avatar on mobile, large on desktop */}
+            <div className="hidden lg:block">
+              <Avatar level={userData.currentLevel} size="lg" animated />
+            </div>
+            <div className="block lg:hidden">
+              <Avatar level={userData.currentLevel} size="md" animated />
+            </div>
             <div className="mt-4 w-full">
               <LevelProgress
                 level={userData.currentLevel}
@@ -274,8 +280,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Column (2/3) - Form and Chart */}
-          <div className="flex flex-col gap-4">
+          {/* Right Column - Form and Chart (full width on mobile, 2/3 on desktop) */}
+          <div className="flex flex-col gap-4 lg:col-span-2">
             {/* Weight Entry */}
             <WeightEntryComponent
               onSubmit={handleWeightSubmit}
